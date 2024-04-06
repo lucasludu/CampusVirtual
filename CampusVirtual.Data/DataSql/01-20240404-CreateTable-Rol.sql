@@ -1,0 +1,10 @@
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE NAME = 'Rol')
+BEGIN
+
+	CREATE TABLE Rol (
+		Id INT IDENTITY(1,1),
+		Nombre VARCHAR(50),
+		CONSTRAINT pk_Rol PRIMARY KEY (Id)
+	);
+
+END
