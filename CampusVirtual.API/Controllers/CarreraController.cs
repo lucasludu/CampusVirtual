@@ -11,7 +11,6 @@ namespace CampusVirtual.API.Controllers
     /// <summary>
     /// CONTROLADOR DE LA CLASE CARRERA
     /// </summary>
-    [Authorize]
     [ApiController]
     [Route("[controller]")]
     [ApiExplorerSettings(GroupName = "ApiCarreraCV")]
@@ -130,6 +129,27 @@ namespace CampusVirtual.API.Controllers
 
                 return list.Count != 0
                     ? StatusCode(StatusCodes.Status200OK, _mapper.Map<List<CarreraDto>>(list))
+                    : StatusCode(StatusCodes.Status204NoContent, "No se encuentra la carrera ingresada.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Devuelve una lista de Carrera (Id y Nombre)
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("combo")]
+        public ActionResult GetAllForCombo()
+        {
+            try
+            {
+                var list = _unitOfWork.Carrera.GetAll();
+
+                return list.Count != 0
+                    ? StatusCode(StatusCodes.Status200OK, _mapper.Map<List<CarreraComboDto>>(list))
                     : StatusCode(StatusCodes.Status204NoContent, "No se encuentra la carrera ingresada.");
             }
             catch (Exception ex)

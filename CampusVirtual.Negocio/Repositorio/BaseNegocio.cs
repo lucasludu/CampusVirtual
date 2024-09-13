@@ -24,6 +24,11 @@ namespace CampusVirtual.Negocio.Repositorio
             return this._context!.Set<T>().Find(id)!;
         }
 
+        public bool Exists(Expression<Func<T, bool>> expression)
+        {
+            return this._context.Set<T>().Any(expression);
+        }
+
         public List<T> GetAll()
         {
             return this._context!.Set<T>().ToList();

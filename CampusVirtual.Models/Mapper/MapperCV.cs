@@ -16,6 +16,7 @@ namespace CampusVirtual.Models.Mapper
             
             CreateMap<Carrera, CarreraInsertDto>().ReverseMap();
             CreateMap<Carrera, CarreraUpdateDto>().ReverseMap();
+            CreateMap<Carrera, CarreraComboDto>().ReverseMap();
             CreateMap<Carrera, CarreraDto>().ReverseMap();
 
         }

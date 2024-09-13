@@ -75,5 +75,26 @@ namespace CampusVirtual.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Indica si el usuario está o no en uso
+        /// </summary>
+        /// <param name="correo">Correo</param>
+        /// <returns>True/False</returns>
+        [HttpPost("IsAvailable")]
+        [SwaggerOperation(Summary = "Indica si el usuario está en uso o no.")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Usuario Validado", typeof(string))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error interno del servidor.")]
+        public ActionResult IsAvailable([FromBody] string correo)
+        {
+            try
+            {
+                return Ok(_unitOfWork.Usuario.Exists(u => u.Correo.Equals(correo)));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        } 
+
     }
 }

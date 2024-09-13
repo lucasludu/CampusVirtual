@@ -1,4 +1,5 @@
 using AutoMapper;
+using CampusVirtual.Models;
 using CampusVirtual.Models.Dto;
 using CampusVirtual.Negocio.UOW.Interface;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +8,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace CampusVirtual.API.Controllers
 {
-    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("[controller]")]
     [ApiExplorerSettings(GroupName = "ApiUsuarioCV")]
@@ -28,6 +28,7 @@ namespace CampusVirtual.API.Controllers
         /// Devuelve la lista de usuarios (Estudiantes - Admin)
         /// </summary>
         /// <returns></returns>
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [SwaggerOperation(Summary = "Lista de Usuarios")]
         [SwaggerResponse(StatusCodes.Status200OK, "Lista de ususarios.")]
@@ -53,6 +54,7 @@ namespace CampusVirtual.API.Controllers
         /// </summary>
         /// <param name="correo">Correo</param>
         /// <returns></returns>
+        [Authorize(Roles = "Admin")]
         [HttpGet("Correo")]
         [SwaggerOperation(Summary = "Usuario según correo")]
         [SwaggerResponse(StatusCodes.Status200OK, "Se encontro el usuario", typeof(UserDto))]
@@ -66,6 +68,30 @@ namespace CampusVirtual.API.Controllers
                 return (usuario != null)
                     ? StatusCode(StatusCodes.Status200OK, usuario)
                     : StatusCode(StatusCodes.Status204NoContent, "No se encontro al usuario");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Muestra los roles del usuario
+        /// </summary>
+        /// <returns>Roles</returns>
+        [HttpGet("Rol")]
+        [SwaggerOperation(Summary = "Lista de roles")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Roles")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "No hay roles.")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Error interno del servidor.")]
+        public ActionResult GetAllRol()
+        {
+            try
+            {
+                var roles = _unitOfWork.Rol.GetAll();
+                return (roles.Count > 0)
+                    ? StatusCode(StatusCodes.Status200OK, roles)
+                    : StatusCode(StatusCodes.Status204NoContent, "No hay roles.");
             }
             catch (Exception ex)
             {
